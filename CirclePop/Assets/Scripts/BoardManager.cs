@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
 
 /*
  * Board Manager Class
@@ -142,18 +140,17 @@ public class BoardManager : MonoBehaviour
 
     private void UpdateBoard(List<Circle> poppedCircles)
     {
-        // post pop
         // get starting points for updating board 
         int[] colOffsets = new int[_boardSize.x]; // number of circles popped in the column
         int[] rowStart = new int[_boardSize.x]; // the lowest popped circle
-        for (int i = 0; i < _boardSize.x; i++)
+        for (int i = 0; i < _boardSize.x; i++) // initialize to high value
             rowStart[i] = _boardSize.y;
 
         foreach (Circle circle in poppedCircles)
         {
             // get map coord of popped circle
             Vector2 mapCoord = IndexToMapCoord(circle.CellIndex);
-            // log column popped is in
+            // log column the popped circle is in
             ++colOffsets[(int) mapCoord.x];
             // see if its the lowest one
             if (mapCoord.y < rowStart[(int) mapCoord.x])
@@ -164,16 +161,28 @@ public class BoardManager : MonoBehaviour
         for (int col = 0; col < _boardSize.x; col++)
         {
             //Debug.Log("Col " + col + ": " + colOffsets[col] + " popped, lowest = " + rowStart[col]);
-            // skip if no popped circles
+            // skip if no popped circles in column
             if (colOffsets[col] <= 0) continue;
+                
+            Debug.Log("Col " + col + " starts on row " + rowStart[col] + " with " + colOffsets[col] + " popped circles");
 
             // got to top of board from lowest point
+            int lastRow=rowStart[col]+1;
             for (int row = rowStart[col]; row < _boardSize.y; row++)
             {
-                // find new map coord for the circle to fall from
-                Vector2 newMapCoord = new Vector2(col, row + colOffsets[col]);
-                //Debug.Log("(" + col + ", " + row + ") => " + newMapCoord.ToString("F3"));
+                // find map coord for the circle being processed
+                Vector2 currMapCoord = new Vector2(col, row);
+                int currIndex = MapCoordToIndex(currMapCoord);
 
+                // move up to next open circle
+                Vector2 newMapCoord = currMapCoord;
+                newMapCoord.y = lastRow;
+                // increment row until out of bounds or un-popped circle is found
+                while (newMapCoord.y < _boardSize.y && poppedCircles.Contains(_cells[MapCoordToIndex(newMapCoord)]))
+                    newMapCoord.y++;
+
+                lastRow = (int)newMapCoord.y + 1;
+                    
                 int colIndex;
                 // if map coord is in the board: steal color from circle in drop location
                 if (newMapCoord.y < _boardSize.y)
@@ -208,7 +217,7 @@ public class BoardManager : MonoBehaviour
                 testCoord.y < 0 || testCoord.y >= _boardSize.y)
                 continue;
 
-            // check if valid and not already in either list
+            // add to open if not already in that or in closed
             Circle cell = _cells[MapCoordToIndex(testCoord)];
             if (!closed.Contains(cell) && !open.Contains(cell))
             {

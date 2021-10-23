@@ -33,7 +33,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Get dimensions of play area
-        Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0,40,0));
+        Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0,50,0));
         Vector2 topRight = mainCam.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
         Debug.Log(bottomLeft+"  &  "+topRight);
         
