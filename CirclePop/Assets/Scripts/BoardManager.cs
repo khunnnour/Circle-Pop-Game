@@ -15,6 +15,7 @@ public class BoardManager : MonoBehaviour
     private Vector2Int _boardSize;
     private Vector2 _cellDimensions;
     private int _numCells;
+    private int _numCols;
     private Circle[] _cells;
     private bool _clickable; // if board is currently intractable
 
@@ -31,15 +32,19 @@ public class BoardManager : MonoBehaviour
     /// </summary>
     /// <param name="bS">board size (in circles)</param>
     /// <param name="sS">screen size (in world units)</param>
-    public void Init(Vector2Int bS, Vector2 sS)
+    /// <param name="nC">number of colors to use</param>
+    public void Init(Vector2Int bS, Vector2 sS, int nC)
     {
+        Debug.Log("Init board of size " + bS + " -- " + sS + " with " + nC + " colors");
+
+        _numCols = nC;
+
         _boardSize = bS;
         // turn into dimensions of each cell
         _cellDimensions = new Vector2(
             (sS.x) / _boardSize.x,
             (sS.y) / _boardSize.y
         );
-        Debug.Log(_cellDimensions.ToString("F3"));
 
         // populate the board ---
         // get prefab
@@ -51,9 +56,9 @@ public class BoardManager : MonoBehaviour
         {
             GameObject newCell = Instantiate(circlePref, transform);
             newCell.transform.localPosition = MapCoordToWorldPos(IndexToMapCoord(i));
-            int colIn = Random.Range(0, colors.Length);
+            int colIn = Random.Range(0, _numCols);
             _cells[i] = newCell.GetComponent<Circle>();
-            _cells[i].Init(i,colIn, colors[colIn]);
+            _cells[i].Init(i, colIn, colors[colIn]);
         }
 
         _clickable = true;
@@ -131,7 +136,7 @@ public class BoardManager : MonoBehaviour
             Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
             return -1;
         }
-        
+
         _clickable = true;
         UpdateBoard(poppedList);
         Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
@@ -163,11 +168,12 @@ public class BoardManager : MonoBehaviour
             //Debug.Log("Col " + col + ": " + colOffsets[col] + " popped, lowest = " + rowStart[col]);
             // skip if no popped circles in column
             if (colOffsets[col] <= 0) continue;
-                
-            Debug.Log("Col " + col + " starts on row " + rowStart[col] + " with " + colOffsets[col] + " popped circles");
+
+            Debug.Log("Col " + col + " starts on row " + rowStart[col] + " with " + colOffsets[col] +
+                      " popped circles");
 
             // got to top of board from lowest point
-            int lastRow=rowStart[col]+1;
+            int lastRow = rowStart[col] + 1;
             for (int row = rowStart[col]; row < _boardSize.y; row++)
             {
                 // find map coord for the circle being processed
@@ -181,8 +187,8 @@ public class BoardManager : MonoBehaviour
                 while (newMapCoord.y < _boardSize.y && poppedCircles.Contains(_cells[MapCoordToIndex(newMapCoord)]))
                     newMapCoord.y++;
 
-                lastRow = (int)newMapCoord.y + 1;
-                    
+                lastRow = (int) newMapCoord.y + 1;
+
                 int colIndex;
                 // if map coord is in the board: steal color from circle in drop location
                 if (newMapCoord.y < _boardSize.y)
@@ -191,7 +197,7 @@ public class BoardManager : MonoBehaviour
                 }
                 else // otherwise: generate new random color
                 {
-                    colIndex = Random.Range(0, colors.Length);
+                    colIndex = Random.Range(0, _numCols);
                 }
 
                 // get the circle you are actually updating
@@ -232,7 +238,7 @@ public class BoardManager : MonoBehaviour
     {
         return new Vector2(
             index % _boardSize.x,
-            Mathf.FloorToInt((float)index / (float)_boardSize.x)
+            Mathf.FloorToInt((float) index / (float) _boardSize.x)
         );
     }
 
@@ -259,5 +265,15 @@ public class BoardManager : MonoBehaviour
             Mathf.Floor((worldPos.x - transform.position.x) / _cellDimensions.x),
             Mathf.Floor((worldPos.y - transform.position.y) / _cellDimensions.y)
         );
+    }
+
+    public void ClearBoard()
+    {
+        foreach (Circle cell in _cells)
+        {
+            Destroy(cell.gameObject);
+        }
+
+        _cells = new Circle[] { };
     }
 }
