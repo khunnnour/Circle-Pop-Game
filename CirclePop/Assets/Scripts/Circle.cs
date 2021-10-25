@@ -15,6 +15,7 @@ public class Circle : MonoBehaviour
 
     public int ColIndex => _colIndex;
     public int CellIndex => _index;
+    public static float TotalTime => START_DELAY + TIME_TO_FALL;
 
     private void Awake()
     {

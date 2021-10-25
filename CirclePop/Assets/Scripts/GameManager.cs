@@ -39,7 +39,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         // Get dimensions of play area
-        Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0,100,0));
+        Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0,70,0));
         Vector2 topRight = mainCam.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
         Debug.Log(bottomLeft+"  &  "+topRight);
         _playAreaSize = topRight - bottomLeft;
@@ -88,28 +88,109 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        startPanel.SetActive(false);
+        //startPanel.SetActive(false);
+        StartCoroutine(HideStartPanel());
         
         int numCol= int.Parse(colDrop.options[colDrop.value].text);
         BoardManager.Instance.Init(boardSize,_playAreaSize,numCol);
-        
-        extraMoveAmt = 21 - Mathf.RoundToInt((float)numCol*2.5f);
 
-        _bonusScale = numCol * 0.25f;
+        switch (numCol)
+        {
+            case 3:
+                extraMoveAmt = 20;
+                _bonusScale = 0.25f;
+                _moves = 25;
+                break;
+            case 4:
+                extraMoveAmt = 15;
+                _bonusScale = 1.25f;
+                _moves = 30;
+                break;
+            case 5:
+                extraMoveAmt = 10;
+                _bonusScale = 1.75f;
+                _moves = 35;
+                break;
+        }
+
+        //_bonusScale = numCol *numCol * 0.075f;
         
         // set score up
         _score = 0;
         // set moves up
-        _moves = startingMoves;
+        //_moves = startingMoves+numCol;
         
-        _playing = true;
         UpdateUI();
     }
 
     private void EndGame()
     {
-        BoardManager.Instance.ClearBoard();
-        startPanel.SetActive(true);
+        
+        StartCoroutine(ShowStartPanel());
+        //startPanel.SetActive(true);
+    }
+
+    IEnumerator ShowStartPanel()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        float fadeInTime = 0.75f;
+        float t = 0;
+
+        RectTransform buttonBox = startPanel.transform.GetChild(0).GetComponent<RectTransform>();
+        while (t < fadeInTime)
+        {
+            // fade in overlay
+            Color newCol = startPanel.GetComponent<Image>().color;
+            newCol.a = 0.6f * (t / fadeInTime);
+            startPanel.GetComponent<Image>().color = newCol;
+            
+            // transition start box
+            Vector2 newPos = buttonBox.anchoredPosition;
+            newPos.y = 700 + (0 - 700) * t / fadeInTime;
+            buttonBox.anchoredPosition = newPos; 
+
+            Vector2 newSize = buttonBox.sizeDelta;
+            newSize.x = 200 + (350 - 200) * t / fadeInTime;
+            newSize.y = 100 + (175 - 100) * t / fadeInTime;
+            buttonBox.sizeDelta = newSize; 
+            
+            // increment time
+            t += Time.deltaTime;
+        }
+        
         _playing = false;
+        BoardManager.Instance.ClearBoard();
+    }
+    IEnumerator HideStartPanel()
+    {
+        yield return new WaitForSeconds(0.05f);
+
+        float fadeOutTime = 0.75f;
+        float t = 0;
+
+        RectTransform buttonBox = startPanel.transform.GetChild(0).GetComponent<RectTransform>();
+        while (t < fadeOutTime)
+        {
+            // increment time
+            t += Time.deltaTime;
+            
+            // fade out overlay
+            Color newCol = startPanel.GetComponent<Image>().color;
+            newCol.a = 0.6f + (0f - 0.6f) * t / fadeOutTime;
+            startPanel.GetComponent<Image>().color = newCol;
+
+            // transition start box
+            Vector2 newPos = buttonBox.anchoredPosition;
+            newPos.y = 700 + (700 - 0) * t / fadeOutTime;
+            buttonBox.anchoredPosition = newPos;
+
+            Vector2 newSize = buttonBox.sizeDelta;
+            newSize.x = 350 + (200 - 350) * t / fadeOutTime;
+            newSize.y = 175 + (100 - 175) * t / fadeOutTime;
+            buttonBox.sizeDelta = newSize;
+        }
+        
+        _playing = true;
     }
 }

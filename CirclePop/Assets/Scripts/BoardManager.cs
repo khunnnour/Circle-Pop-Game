@@ -76,21 +76,21 @@ public class BoardManager : MonoBehaviour
         // if not clickable then return invalid
         if (!_clickable)
         {
-            Debug.Log("Not clickable");
-            Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
+            //Debug.Log("Not clickable");
+            //Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
             return -1;
         }
 
         // convert click position into a map coordinate
         Vector2 moveOrigin = WorldPosToMapCoord(clickPos);
-        Debug.Log("Trying to make a move at " + moveOrigin);
+        //Debug.Log("Trying to make a move at " + moveOrigin);
 
         // if click is out of play area then return invalid 
         if (moveOrigin.x < 0 || moveOrigin.x >= _boardSize.x ||
             moveOrigin.y < 0 || moveOrigin.y >= _boardSize.y)
         {
-            Debug.Log("Not in play area");
-            Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
+            //Debug.Log("Not in play area");
+            //Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
             return -1;
         }
 
@@ -169,8 +169,8 @@ public class BoardManager : MonoBehaviour
             // skip if no popped circles in column
             if (colOffsets[col] <= 0) continue;
 
-            Debug.Log("Col " + col + " starts on row " + rowStart[col] + " with " + colOffsets[col] +
-                      " popped circles");
+            //Debug.Log("Col " + col + " starts on row " + rowStart[col] + " with " + colOffsets[col] +
+            //          " popped circles");
 
             // got to top of board from lowest point
             int lastRow = rowStart[col] + 1;

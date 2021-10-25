@@ -5,17 +5,16 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Unity WebGL Player | CirclePop</title>
 	<style>
-		html {
-			overflow: hidden;
-		}
-		body {
-			text-align: center;
-			margin: 0;
-		}
+	html {
+		overflow: hidden;
+	}
+	body {
+		margin: 0px;
+	}
 	</style>
   </head>
-  <body>
-    <canvas id="unity-canvas" width=480 height=640 style="width: 480px; height: 640px; background: #231F20"></canvas>
+  <body style="text-align: center">
+    <canvas id="unity-canvas" width=630 height=700 style="width: 630px; height: 700px; background: #231F20"></canvas>
     <script src="Build/CirclePopBuild.loader.js"></script>
     <script>
       createUnityInstance(document.querySelector("#unity-canvas"), {
@@ -25,7 +24,7 @@
         streamingAssetsUrl: "StreamingAssets",
         companyName: "khunnnour",
         productName: "CirclePop",
-        productVersion: "0.1",
+        productVersion: "0.2",
         // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
         // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
       });
