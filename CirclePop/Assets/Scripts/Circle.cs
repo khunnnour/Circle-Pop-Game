@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
-    const float START_DELAY = 0.1f;
-    const float TIME_TO_FALL = 0.2f;
+    const float START_DELAY  = 0.05f;
+    const float TIME_TO_FALL = 0.15f;
 
     private SpriteRenderer _renderer;
     private Vector3 _defaultPos;
@@ -51,8 +51,8 @@ public class Circle : MonoBehaviour
         float t = 0.0f;
         while (t < TIME_TO_FALL)
         {
-            transform.localPosition = Vector3.Lerp(start, _defaultPos, t / TIME_TO_FALL);
             t += Time.deltaTime;
+            transform.localPosition = Vector3.Lerp(start, _defaultPos, t / TIME_TO_FALL);
             yield return null;
         }
     }

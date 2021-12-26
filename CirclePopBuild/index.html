@@ -1,33 +1,28 @@
 <!DOCTYPE html>
 <html lang="en-us">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>Unity WebGL Player | CirclePop</title>
-	<style>
-	html {
-		overflow: hidden;
-	}
-	body {
-		margin: 0px;
-	}
-	</style>
-  </head>
-  <body style="text-align: center">
-    <canvas id="unity-canvas" width=630 height=700 style="width: 630px; height: 700px; background: #231F20"></canvas>
-    <script src="Build/CirclePopBuild.loader.js"></script>
-    <script>
-      createUnityInstance(document.querySelector("#unity-canvas"), {
-        dataUrl: "Build/CirclePopBuild.data",
-        frameworkUrl: "Build/CirclePopBuild.framework.js",
-        codeUrl: "Build/CirclePopBuild.wasm",
-        streamingAssetsUrl: "StreamingAssets",
-        companyName: "khunnnour",
-        productName: "CirclePop",
-        productVersion: "0.2",
-        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-      });
-    </script>
-  </body>
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>CirclePop</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+	<body style="text-align: center">
+	<canvas id="unity-canvas" style="background: #231F20"></canvas>
+	<script src="Build/CirclePopBuild.loader.js"></script>
+	<script>
+	createUnityInstance(document.querySelector("#unity-canvas"), {
+		dataUrl: "Build/CirclePopBuild.data",
+		frameworkUrl: "Build/CirclePopBuild.framework.js",
+		codeUrl: "Build/CirclePopBuild.wasm",
+		streamingAssetsUrl: "StreamingAssets",
+		companyName: "khunnnour",
+		productName: "CirclePop",
+		productVersion: "0.3",
+	});
+	//float newW = window.innerWidth;
+	//float newH = window.innerHeight;
+	//console.log(newW + ", " + newH);
+	</script>
+	<script src="script.js"></script>
+	</body>
 </html>
