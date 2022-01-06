@@ -12,8 +12,8 @@ public class BoardManager : MonoBehaviour
 
     public Color[] colors;
 
-    private Vector2Int _boardSize;
-    private Vector2 _cellDimensions;
+    private Vector2Int _boardSize;	// board dimensions in cells
+    private Vector2 _cellDimensions;// cell dimensions in world units
     private int _numCells;
     private int _numCols;
     private Circle[] _cells;
@@ -131,15 +131,15 @@ public class BoardManager : MonoBehaviour
 
         if (numPopped < GameManager.Instance.minPopAmt)
         {
-            Debug.Log("Insufficient Pops (" + numPopped + ")");
+            //Debug.Log("Insufficient Pops (" + numPopped + ")");
             _clickable = true;
-            Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
+            //Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
             return -1;
         }
 
         _clickable = true;
         UpdateBoard(poppedList);
-        Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
+        //Debug.Log("Took " + ((Time.time - startTime) * 1000f).ToString("F3") + "ms");
         return numPopped;
     }
 
