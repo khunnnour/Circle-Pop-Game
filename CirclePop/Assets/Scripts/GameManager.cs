@@ -18,8 +18,8 @@ public class GameManager : MonoBehaviour
 
 	[Header("Object References")]
 	public Camera mainCam;
-	public Text scoreText;
-	public Text movesText;
+	public TMP_Text scoreText;
+	public TMP_Text movesText;
 	public GameObject startPanel;
 	public TMP_Dropdown colDrop;
 
@@ -39,15 +39,20 @@ public class GameManager : MonoBehaviour
 	void Start()
 	{
 		// Get dimensions of play area
-		Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0, 80, 0));
-		Vector2 topRight = mainCam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height - 55, 0));
-		Debug.Log(bottomLeft + "  &  " + topRight);
+		RectTransform sPRect = startPanel.GetComponent<RectTransform>();
+		Vector2 dim = sPRect.rect.max - sPRect.rect.min;
+		Vector2 cen = sPRect.anchoredPosition;
+		Vector2 bottomLeft	= mainCam.ScreenToWorldPoint(new Vector3(0,		cen.y + 0.5f * (Screen.height - dim.y), 0));
+		Vector2 topRight	= mainCam.ScreenToWorldPoint(new Vector3(dim.x, cen.y + 0.5f * (Screen.height + dim.y), 0));
+		//Debug.Log(bottomLeft.ToString("F3") + "  &  " + topRight.ToString("F3"));
+
 		_playAreaSize = topRight - bottomLeft;
 
 		// place board
 		BoardManager.Instance.transform.position = bottomLeft;
 		// init board
 		//BoardManager.Instance.Init(boardSize,topRight-bottomLeft);
+
 
 		// set score up
 		_score = 0;
@@ -66,7 +71,7 @@ public class GameManager : MonoBehaviour
 			//Debug.Log("MakeMove returned " + val);
 			if (val > 0)
 			{
-				_score += Mathf.RoundToInt(0.075f * _bonusScale * Mathf.Pow(val, 1.4f)) + val;
+				_score += Mathf.RoundToInt(0.08f * _bonusScale * Mathf.Pow(val, 1.5f)) + val;
 
 				if (val >= extraMoveAmt)
 					++_moves;
@@ -90,6 +95,9 @@ public class GameManager : MonoBehaviour
 	{
 		//startPanel.SetActive(false);
 		StartCoroutine(HideStartPanel());
+		
+		// clear out the board
+		BoardManager.Instance.ClearBoard();
 
 		int numCol = int.Parse(colDrop.options[colDrop.value].text);
 		BoardManager.Instance.Init(boardSize, _playAreaSize, numCol);
@@ -98,17 +106,17 @@ public class GameManager : MonoBehaviour
 		{
 			case 3:
 				extraMoveAmt = 20;
-				_bonusScale = 0.25f;
+				_bonusScale = 0.3f;
 				_moves = 25;
 				break;
 			case 4:
 				extraMoveAmt = 15;
-				_bonusScale = 1.25f;
+				_bonusScale = 1.55f;
 				_moves = 30;
 				break;
 			case 5:
 				extraMoveAmt = 10;
-				_bonusScale = 1.75f;
+				_bonusScale = 2.05f;
 				_moves = 35;
 				break;
 		}
@@ -125,7 +133,6 @@ public class GameManager : MonoBehaviour
 
 	private void EndGame()
 	{
-
 		StartCoroutine(ShowStartPanel());
 		//startPanel.SetActive(true);
 	}
@@ -153,14 +160,13 @@ public class GameManager : MonoBehaviour
 			newPos.y = 700 + (0 - 700) * t / fadeInTime;
 			buttonBox.anchoredPosition = newPos;
 
-			Vector2 newSize = buttonBox.sizeDelta;
-			newSize.x = 200 + (350 - 200) * t / fadeInTime;
-			newSize.y = 100 + (175 - 100) * t / fadeInTime;
-			buttonBox.sizeDelta = newSize;
+			//Vector2 newSize = buttonBox.sizeDelta;
+			//newSize.x = 200 + (350 - 200) * t / fadeInTime;
+			//newSize.y = 100 + (175 - 100) * t / fadeInTime;
+			//buttonBox.sizeDelta = newSize;
 		}
 
 		_playing = false;
-		BoardManager.Instance.ClearBoard();
 	}
 	IEnumerator HideStartPanel()
 	{
@@ -184,11 +190,11 @@ public class GameManager : MonoBehaviour
 			Vector2 newPos = buttonBox.anchoredPosition;
 			newPos.y = 700 + (700 - 0) * t / fadeOutTime;
 			buttonBox.anchoredPosition = newPos;
-
-			Vector2 newSize = buttonBox.sizeDelta;
-			newSize.x = 350 + (200 - 350) * t / fadeOutTime;
-			newSize.y = 175 + (100 - 175) * t / fadeOutTime;
-			buttonBox.sizeDelta = newSize;
+			
+			//Vector2 newSize = buttonBox.sizeDelta;
+			//newSize.x = 350 + (200 - 350) * t / fadeOutTime;
+			//newSize.y = 175 + (100 - 175) * t / fadeOutTime;
+			//buttonBox.sizeDelta = newSize;
 		}
 
 		_playing = true;

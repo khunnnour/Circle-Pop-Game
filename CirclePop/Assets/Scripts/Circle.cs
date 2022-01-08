@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class Circle : MonoBehaviour
 {
-    const float START_DELAY  = 0.05f;
-    const float TIME_TO_FALL = 0.15f;
+    const float START_DELAY  = 0.08f;
+    const float TIME_TO_FALL = 0.16f;
 
     private SpriteRenderer _renderer;
     private Vector3 _defaultPos;
