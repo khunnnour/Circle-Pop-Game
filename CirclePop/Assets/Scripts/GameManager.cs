@@ -18,6 +18,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Object References")] 
     public Camera mainCam;
+    public RectTransform gameUI;
     public Text scoreText;
     public Text movesText;
     public GameObject startPanel;
@@ -35,27 +36,33 @@ public class GameManager : MonoBehaviour
             Instance = this;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        // Get dimensions of play area
-        Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0,70,0));
-        Vector2 topRight = mainCam.ScreenToWorldPoint(new Vector3(Screen.width,Screen.height,0));
-        Debug.Log(bottomLeft+"  &  "+topRight);
-        _playAreaSize = topRight - bottomLeft;
-            
-        // place board
-        BoardManager.Instance.transform.position= bottomLeft;
-        // init board
-        //BoardManager.Instance.Init(boardSize,topRight-bottomLeft);
+	// Start is called before the first frame update
+	void Start()
+	{
+		// resize the ui
+		Vector2 newSizeD = gameUI.sizeDelta;
+		newSizeD.y = Screen.height / 16f;
+		gameUI.sizeDelta = newSizeD;
+		Debug.Log(Screen.height +" / 16 = "+gameUI.sizeDelta);
 
-        // set score up
-        _score = 0;
-        // set moves up
-        _moves = startingMoves;
-        
-        UpdateUI();
-    }
+		// Get dimensions of play area
+		Vector2 bottomLeft = mainCam.ScreenToWorldPoint(new Vector3(0, newSizeD.y, 0));
+		Vector2 topRight = mainCam.ScreenToWorldPoint(new Vector3(Screen.width, Screen.height, 0));
+		Debug.Log(bottomLeft + "  &  " + topRight);
+		_playAreaSize = topRight - bottomLeft;
+
+		// place board
+		BoardManager.Instance.transform.position = bottomLeft;
+		// init board
+		//BoardManager.Instance.Init(boardSize,topRight-bottomLeft);
+
+		// set score up
+		_score = 0;
+		// set moves up
+		_moves = startingMoves;
+
+		UpdateUI();
+	}
 
     private void Update()
     {

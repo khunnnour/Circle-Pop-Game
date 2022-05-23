@@ -42,9 +42,10 @@ public class BoardManager : MonoBehaviour
         _boardSize = bS;
         // turn into dimensions of each cell
         _cellDimensions = new Vector2(
-            (sS.x) / _boardSize.x,
-            (sS.y) / _boardSize.y
+            sS.x / (float)_boardSize.x,
+            sS.y / (float)_boardSize.y
         );
+		Debug.Log("Cell dimensions: " + _cellDimensions.ToString("F2"));
 
         // populate the board ---
         // get prefab
@@ -56,7 +57,8 @@ public class BoardManager : MonoBehaviour
         {
             GameObject newCell = Instantiate(circlePref, transform);
             newCell.transform.localPosition = MapCoordToWorldPos(IndexToMapCoord(i));
-            int colIn = Random.Range(0, _numCols);
+			newCell.transform.localScale = Vector3.one * Mathf.Min(_cellDimensions.x, _cellDimensions.y) * 0.9f;
+			int colIn = Random.Range(0, _numCols);
             _cells[i] = newCell.GetComponent<Circle>();
             _cells[i].Init(i, colIn, colors[colIn]);
         }

@@ -11,17 +11,14 @@
 	<script src="Build/CirclePopBuild.loader.js"></script>
 	<script>
 	createUnityInstance(document.querySelector("#unity-canvas"), {
-		dataUrl: "Build/CirclePopBuild.data",
-		frameworkUrl: "Build/CirclePopBuild.framework.js",
-		codeUrl: "Build/CirclePopBuild.wasm",
+		dataUrl: "Build/CirclePopBuild.data.unityweb",
+		frameworkUrl: "Build/CirclePopBuild.framework.js.unityweb",
+		codeUrl: "Build/CirclePopBuild.wasm.unityweb",
 		streamingAssetsUrl: "StreamingAssets",
 		companyName: "khunnnour",
 		productName: "CirclePop",
-		productVersion: "0.3",
+		productVersion: "0.4",
 	});
-	//float newW = window.innerWidth;
-	//float newH = window.innerHeight;
-	//console.log(newW + ", " + newH);
 	</script>
 	<script src="script.js"></script>
 	</body>
